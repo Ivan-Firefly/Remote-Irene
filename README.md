@@ -2,7 +2,7 @@
 
 
 Отличие от оригинального репозитория:
-1. `run_remoteva_micrem.py` - вынес выбор микрофона `deviceId` и частоту `samplerateMic` в `options.json`
+1. `run_remoteva_micrem.py` - вынес выбор микрофона `deviceId` и частоту `samplerateMic` в `options.json`. Добавлен вывод доступных аудиоустройств перед запуском клиента.
 2. `play_wav.py` - заменил библиотеку на sounddevice (audioplayer почему-то не заработал на Linux)
 3. `run_remoteva_voskrem.py` - добавлен вывод доступных аудиоустройств перед запуском клиента
 
