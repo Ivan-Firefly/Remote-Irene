@@ -1,9 +1,4 @@
-import argparse
 import os
-import queue
-import sounddevice as sd
-import vosk
-import sys
 
 import requests
 import json
@@ -23,7 +18,8 @@ ttsFormat = saved_options["ttsFormat"] # "none" (TTS on server) or "saytxt" (TTS
                     # or mix of the params, splitted by , = "none,saytxt" as example
 ttsFormatList = ttsFormat.split(",")
 baseUrl = saved_options["baseUrl"] # server with Irene WEB api
-
+deviceId=int(saved_options["deviceId"]) # device id
+samplerateMic=int(saved_options["samplerateMic"]) # sampling rate
 from urllib.parse import urlparse
 urlparsed = urlparse(baseUrl)
 
@@ -53,8 +49,6 @@ if "saytxt" in ttsFormatList:
 mic_blocked = False
 
 import json
-import os
-import sys
 import asyncio
 import websockets
 import logging
@@ -73,13 +67,13 @@ def callback(indata, frames, time, status):
     """This is called (from a separate thread) for each audio block."""
     loop.call_soon_threadsafe(audio_queue.put_nowait, bytes(indata))
 
-async def run_test():
+async def run_test(deviceId,samplerateMic):
 
-    with sd.RawInputStream(samplerate=args.samplerate, blocksize = 4000, device=args.device, dtype='int16',
+    with sd.RawInputStream(samplerate=samplerateMic, blocksize = 4000, device=deviceId, dtype='int16',
                            channels=1, callback=callback) as device:
 
         async with websockets.connect(args.uri) as websocket:
-            await websocket.send('{ "config" : { "sample_rate" : %d } }' % (device.samplerate))
+            await websocket.send('{ "config" : { "sample_rate" : %d } }' % device.samplerate)
 
             while True:
                 data = await audio_queue.get()
@@ -155,9 +149,10 @@ async def main():
     logging.basicConfig(level=logging.INFO)
     print("Remote Irene (VOSK REMOTE recognizer) v{0} started! ttsFormat={1}, baseUrl={2}, speechRecognizerWebsocketUrl={3}".format(version,ttsFormat,baseUrl,args.uri))
 
-    await run_test()
+    await run_test(deviceId,samplerateMic)
 
 if __name__ == '__main__':
+    print('\n')
+    print(sd.query_devices())
+    print('\n')
     asyncio.run(main())
-
-
