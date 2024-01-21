@@ -1,4 +1,6 @@
 {
-  "ttsFormat": "none",
-  "baseUrl": "http://127.0.0.1:5003/"
+  "ttsFormat": "saywav",
+  "baseUrl": "http://192.168.0.9:5003/",
+  "deviceId": "0",
+  "samplerateMic": "48000"
 }
