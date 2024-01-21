@@ -1,0 +1,11 @@
+version: '3'
+services:
+  irene-mic-client:
+    container_name: irene-mic-client
+    image: aa
+    devices:
+      - /dev/snd:/dev/snd
+    volumes:
+      - ./options.json:/options.json
+    restart: 'unless-stopped'
+    command: python run_remoteva_voskrem.py
