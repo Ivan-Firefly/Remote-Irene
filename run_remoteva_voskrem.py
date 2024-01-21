@@ -148,11 +148,12 @@ async def main():
 
     logging.basicConfig(level=logging.INFO)
     print("Remote Irene (VOSK REMOTE recognizer) v{0} started! ttsFormat={1}, baseUrl={2}, speechRecognizerWebsocketUrl={3}".format(version,ttsFormat,baseUrl,args.uri))
-
+   
+    print('\nAvaliable devices:')
+    print(sd.query_devices())
+    print()
+    
     await run_test(deviceId,samplerateMic)
 
 if __name__ == '__main__':
-    print('\n')
-    print(sd.query_devices())
-    print('\n')
     asyncio.run(main())
