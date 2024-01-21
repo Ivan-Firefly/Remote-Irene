@@ -7,7 +7,7 @@
 
 **`deviceId` НЕ может быть пустым!**
 
-Образ - https://hub.docker.com/r/firefly27/irene-mic-client
+Образ - https://hub.docker.com/r/firefly27/irene-rem-client
 
 Запускать удобнее через `docker-compose.yml`. Перед запуском положить `options.json` рядом с `docker-compose.yml` и изменить адрес сервера с Ириной (остальные параметры по желанию).
 
