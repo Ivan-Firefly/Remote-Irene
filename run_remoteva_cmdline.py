@@ -68,45 +68,47 @@ if "saytxt" in ttsFormatList:
         print("Ошибка: инициализации pyttsx3, не сможем озвучивать вывод. Переходим на заглушку.")
         ttsInited = False
 
+
+def cmdline_pars(cmd):
+        voice_input_str = cmd
+        if voice_input_str != "" and voice_input_str != None:
+            print(voice_input_str)
+
+            try:
+                r = requests.get(baseUrl+"sendTxtCmd", params={"cmd": voice_input_str, "returnFormat": ttsFormat})
+                if r.text != "":
+                    res = json.loads(r.text)
+                    if res != "NO_VA_NAME": # some cmd was run
+                        if res != None and res != "": # there is some response to play
+                            if "saytxt" in ttsFormatList:
+                                if "restxt" in res.keys():
+                                    if ttsInited:
+                                        ttsEngine.say(res["restxt"])
+                                        ttsEngine.runAndWait()
+                                    else:
+                                        print("ОТВЕТ: "+res["restxt"])
+
+                            if "saywav" in ttsFormatList:
+                                play_wav.saywav_to_file(res,'tmpfile.wav')
+                                play_wav.play_wav('tmpfile.wav')
+
+            except requests.ConnectionError as e:
+                play_wav.play_wav('error_connection.wav')
+            except Exception as e:
+                play_wav.play_wav('error_processing.wav')
+
+        else:
+            #print("2",rec.PartialResult())
+            pass
+
 if __name__ == "__main__":
-
-        print("Remote Irene (Command line variation) v{0} started! ttsFormat={1}, baseUrl={2}".format(version,ttsFormat,baseUrl))
-        print("---------------------")
-        print("Введите команду для голосового помощника.")
-        print("Пример 'привет', 'брось кубик', 'exit'.")
-        while True:
-            cmd = input("VA CMD> ")
-            if cmd == "exit":
-                break
-
-            voice_input_str = cmd
-            if voice_input_str != "" and voice_input_str != None:
-                print(voice_input_str)
-
-                try:
-                    r = requests.get(baseUrl+"sendTxtCmd", params={"cmd": voice_input_str, "returnFormat": ttsFormat})
-                    if r.text != "":
-                        res = json.loads(r.text)
-                        if res != "NO_VA_NAME": # some cmd was run
-                            if res != None and res != "": # there is some response to play
-                                if "saytxt" in ttsFormatList:
-                                    if "restxt" in res.keys():
-                                        if ttsInited:
-                                            ttsEngine.say(res["restxt"])
-                                            ttsEngine.runAndWait()
-                                        else:
-                                            print("ОТВЕТ: "+res["restxt"])
-
-                                if "saywav" in ttsFormatList:
-                                    play_wav.saywav_to_file(res,'tmpfile.wav')
-                                    play_wav.play_wav('tmpfile.wav')
-
-                except requests.ConnectionError as e:
-                    play_wav.play_wav('error_connection.wav')
-                except Exception as e:
-                    play_wav.play_wav('error_processing.wav')
-
-            else:
-                #print("2",rec.PartialResult())
-                pass
-
+    print("Remote Irene (Command line variation) v{0} started! ttsFormat={1}, baseUrl={2}".format(version, ttsFormat,
+                                                                                                  baseUrl))
+    print("---------------------")
+    print("Введите команду для голосового помощника.")
+    print("Пример 'привет', 'брось кубик', 'exit'.")
+    while True:
+        cmd = input("VA CMD> ")
+        if cmd == "exit":
+            break
+        cmdline_pars(cmd)
