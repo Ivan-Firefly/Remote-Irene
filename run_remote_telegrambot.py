@@ -5,6 +5,7 @@ import random
 import time
 import requests
 
+import run_remoteva_cmdline
 
 version = "1.3"
 
@@ -158,6 +159,14 @@ def get_image_messages(message):
             else:                                   # linux variants
                 subprocess.call(('xdg-open', filepath))
 
+@bot.message_handler(commands=['voiceover'])
+def ask_user(message):
+    bot.send_message(message.chat.id, 'Какую фразу необходимо озвучить?')
+    bot.register_next_step_handler(message, process_reply)
+
+def process_reply(message):
+    run_remoteva_cmdline.cmdline_pars('скажи '+message.text)
+    bot.send_message(message.chat.id, "Сообщение озвучено", reply_markup=types.ReplyKeyboardRemove())
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
@@ -275,5 +284,5 @@ def voice_processing(message):
                 bot.send_message(message.chat.id, "Распознавание голосовых файлов (VOSK) не работает")
 
 
-bot.infinity_polling()
 
+bot.infinity_polling()
