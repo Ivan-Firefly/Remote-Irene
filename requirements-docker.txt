@@ -2,3 +2,4 @@ soundfile==0.12.1
 sounddevice==0.4.6
 websockets==12.0
 requests==2.31.0
+telebot==0.0.5
