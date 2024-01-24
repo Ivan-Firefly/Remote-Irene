@@ -2,11 +2,10 @@ version: '3'
 services:
   irene-mic-client:
     container_name: irene-mic-client
-    image: ss
+    image: firefly27/irene-mic-client
     devices:
       - /dev/snd:/dev/snd
     volumes:
       - ./options.json:/options.json
       - ./options_telegrambot.json:/options_telegrambot.json
     restart: 'unless-stopped'
-    # command: python run_remote_telegrambot.py
