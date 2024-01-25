@@ -21,4 +21,4 @@ COPY run_remoteva_micrem.py \
 
 RUN pip install -r requirements.txt
 
-CMD sh -c "python3 run_remoteva_voskrem.py & python3 run_remote_telegrambot.py"
+CMD sh -c "python3 run_remoteva_voskrem.py"
