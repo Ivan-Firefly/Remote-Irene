@@ -19,6 +19,6 @@ COPY run_remoteva_micrem.py \
      run_remoteva_cmdline.py \
      jaa.py /
 
-RUN pip install -r requirements.txt
+RUN pip install -r ./requirements-docker.txt
 
 CMD sh -c "python3 run_remoteva_voskrem.py"
