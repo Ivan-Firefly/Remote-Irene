@@ -5,6 +5,7 @@ import random
 import time
 import requests
 
+import play_wav
 
 version = "1.3"
 
@@ -158,6 +159,26 @@ def get_image_messages(message):
             else:                                   # linux variants
                 subprocess.call(('xdg-open', filepath))
 
+@bot.message_handler(commands=['voiceover'])
+def ask_user(message):
+    bot.send_message(message.chat.id, 'Какую фразу необходимо озвучить?')
+    bot.register_next_step_handler(message, process_reply)
+
+def process_reply(message):
+    try:
+        r = requests.get(baseUrl + 'ttsWav?text='+message.text)
+        if r.text != "":
+            res = json.loads(r.text)
+            if res != "NO_VA_NAME":  # some cmd was run
+                if res != None and res != "":  # there is some response to play
+                    play_wav.saywav_to_file(res, 'tmpfile.wav')
+                    play_wav.play_wav('tmpfile.wav')
+                    bot.send_message(message.chat.id, "Сообщфение озвучено",
+                                     reply_markup=types.ReplyKeyboardRemove())
+    except requests.ConnectionError as e:
+        bot.send_message(message.chat.id, "Нет связи с сервером", reply_markup=types.ReplyKeyboardRemove())
+    except Exception as e:
+        bot.send_message(message.chat.id, "Ошибка обработки результата", reply_markup=types.ReplyKeyboardRemove())
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
@@ -273,6 +294,7 @@ def voice_processing(message):
                     bot.send_message(message.chat.id, "Распознано: "+latestRec+".",reply_markup=markup)
             else:
                 bot.send_message(message.chat.id, "Распознавание голосовых файлов (VOSK) не работает")
+
 
 
 bot.infinity_polling()
