@@ -165,12 +165,14 @@ def ask_user(message):
     bot.register_next_step_handler(message, process_reply)
 
 def process_reply(message):
+    import traceback
     try:
         r = requests.get(baseUrl + 'ttsWav?text='+message.text)
         if r.text != "":
             res = json.loads(r.text)
             if res != "NO_VA_NAME":  # some cmd was run
                 if res != None and res != "":  # there is some response to play
+                    import play_wav
                     play_wav.saywav_to_file(res, 'tmpfile.wav')
                     play_wav.play_wav('tmpfile.wav')
                     bot.send_message(message.chat.id, "Сообщфение озвучено",
