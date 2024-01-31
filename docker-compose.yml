@@ -5,8 +5,10 @@ services:
     image: firefly27/irene-mic-client
     devices:
       - /dev/snd:/dev/snd
+      - /dev/bus/usb:/dev/bus/usb
     volumes:
+      - /etc/asound.conf:/etc/asound.conf
       - ./options.json:/options.json
       - ./options_telegrambot.json:/options_telegrambot.json
     restart: 'unless-stopped'
-    # command: python3 run_remoteva_voskrem.py & python3 run_remote_telegrambot.py
+    # command: python run_remote_telegrambot.py
