@@ -1,14 +1,18 @@
 version: '3'
 services:
-  irene-mic-client:
-    container_name: irene-mic-client
-    image: firefly27/irene-mic-client
+  remote-irene-docker:
+    container_name: remote-irene-docker
+    image: firefly27/remote-irene-docker
     devices:
       - /dev/snd:/dev/snd
-      - /dev/bus/usb:/dev/bus/usb
     volumes:
       - /etc/asound.conf:/etc/asound.conf
       - ./options.json:/options.json
       - ./options_telegrambot.json:/options_telegrambot.json
+    tty: true
+    logging:
+      driver: syslog
+      options:
+        mode: non-blocking
     restart: 'unless-stopped'
-    # command: python run_remote_telegrambot.py
+    # command: sh -c "python3 run_remote_telegrambot.py & python3 run_remoteva_voskrem.py"
