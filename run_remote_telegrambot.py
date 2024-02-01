@@ -175,7 +175,7 @@ def process_reply(message):
                     import play_wav
                     play_wav.saywav_to_file(res, 'tmpfile.wav')
                     play_wav.play_wav('tmpfile.wav')
-                    bot.send_message(message.chat.id, "Сообщфение озвучено",
+                    bot.send_message(message.chat.id, "Сообщение озвучено",
                                      reply_markup=types.ReplyKeyboardRemove())
     except requests.ConnectionError as e:
         bot.send_message(message.chat.id, "Нет связи с сервером", reply_markup=types.ReplyKeyboardRemove())
