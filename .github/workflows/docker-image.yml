@@ -9,6 +9,10 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: Extract Repository Name
+        id: extract_repo_name
+        run: echo "::set-output name=repo_name::$(basename $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')"
+
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Docker Buildx
@@ -25,4 +29,4 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/$({{ github.repository }} | basename | tr '[:upper:]' '[:lower:]'):latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.extract_repo_name.outputs.repo_name }}:latest
